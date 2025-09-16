@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  stashplayavr-api:
+    image: yourusername/stashplayavr-api:latest
+    container_name: stashplayavr-api
+    ports:
+      - "8890:8890"
+    environment:
+      # StashApp Configuration
+      - StashApp__Url=http://your-stashapp-host:9999
+      - StashApp__GraphQLUrl=http://your-stashapp-host:9999/graphql
+      - StashApp__ApiKey=your-stash-api-key-here
+      
+      # JWT Configuration
+      - JWT__Secret=your-jwt-secret-key-here
+      - JWT__Issuer=StashPlayaVR-API
+      - JWT__Audience=StashPlayaVR-Client
+      
+      # App Configuration
+      - App__Host=0.0.0.0
+      - App__Port=8890
+      - App__ShowAllActors=false
+      - App__SortPopularityByRating=false
+      
+      # User Configuration (username:password pairs)
+      - Users__admin=password123
+      - Users__user=userpass
+      
+      # Logging
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Warning
+      
+      # Environment
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8890
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8890/api/playa/v2/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - stashplayavr-network
+
+networks:
+  stashplayavr-network:
+    driver: bridge

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  stashplayavr-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stashplayavr-api
+    ports:
+      - "8890:8890"
+    environment:
+      # Application settings
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8890
+      
+      # App configuration
+      - App__Host=0.0.0.0
+      - App__Port=8890
+      
+      # JWT configuration (CHANGE THESE!)
+      - JWT__Secret=${JWT_SECRET:-your-super-secret-jwt-key-that-should-be-at-least-32-characters-long-for-production-use}
+      - JWT__Issuer=StashPlayaVR-API
+      - JWT__Audience=StashPlayaVR-Client
+      
+      # StashApp configuration (UPDATE THESE!)
+      - StashApp__Url=${STASH_URL:-http://your-stash-server:9969}
+      - StashApp__GraphQLUrl=${STASH_GRAPHQL_URL:-http://your-stash-server:9969/graphql}
+      - StashApp__ApiKey=${STASH_API_KEY:-your-stash-api-key-here}
+      
+      # User management (CHANGE THESE!)
+      - Users__admin=${ADMIN_PASSWORD:-your-admin-password}
+      - Users__user=${USER_PASSWORD:-your-user-password}
+      - Users__test=${TEST_PASSWORD:-your-test-password}
+    volumes:
+      # Optional: Mount custom appsettings.json
+      # - ./config/appsettings.json:/app/appsettings.json:ro
+      
+      # Optional: Mount logs directory
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8890/api/playa/v2/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - stashplayavr-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stashplayavr-api.rule=Host(`stashplayavr-api.yourdomain.com`)"
+      - "traefik.http.routers.stashplayavr-api.entrypoints=websecure"
+      - "traefik.http.routers.stashplayavr-api.tls.certresolver=letsencrypt"
+
+networks:
+  stashplayavr-network:
+    driver: bridge
