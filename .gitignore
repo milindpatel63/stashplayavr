@@ -356,6 +356,11 @@ backups/
 *.zip
 *.bak
 
+# Configuration files with secrets
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
 # Environment files
 .env
 .env.local
