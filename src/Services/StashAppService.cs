@@ -574,9 +574,9 @@ namespace PlayaApiV2.Services
             // Use external URL if configured (for reverse proxy scenarios)
             if (!string.IsNullOrEmpty(_appOptions.ExternalUrl))
             {
-                var externalAuthToken = GetCurrentAuthToken();
-                var externalAuthParam = !string.IsNullOrEmpty(externalAuthToken) ? $"?auth_token={externalAuthToken}" : "";
-                return $"{_appOptions.ExternalUrl}/api/playa/v2/actor/{actorId}/image{externalAuthParam}";
+                var authToken = GetCurrentAuthToken();
+                var authParam = !string.IsNullOrEmpty(authToken) ? $"?auth_token={authToken}" : "";
+                return $"{_appOptions.ExternalUrl}/api/playa/v2/actor/{actorId}/image{authParam}";
             }
             
             // Fallback to current request's host
@@ -953,9 +953,9 @@ namespace PlayaApiV2.Services
             // Use external URL if configured (for reverse proxy scenarios)
             if (!string.IsNullOrEmpty(_appOptions.ExternalUrl))
             {
-                var externalAuthToken = GetCurrentAuthToken();
-                var externalAuthParam = !string.IsNullOrEmpty(externalAuthToken) ? $"?auth_token={externalAuthToken}" : "";
-                return $"{_appOptions.ExternalUrl}/api/playa/v2/video/{videoId}/stream{externalAuthParam}";
+                var authToken = GetCurrentAuthToken();
+                var authParam = !string.IsNullOrEmpty(authToken) ? $"?auth_token={authToken}" : "";
+                return $"{_appOptions.ExternalUrl}/api/playa/v2/video/{videoId}/stream{authParam}";
             }
             
             // Fallback to current request's host
