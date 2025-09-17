@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.HttpOverrides;
 
 using Newtonsoft.Json;
 
@@ -83,11 +84,11 @@ internal class Program
         var app = builder.Build();
 
         // Handle forwarded headers from Traefik
-        app.UseForwardedHeaders(new Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersOptions
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
         {
-            ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | 
-                              Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto |
-                              Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | 
+                              ForwardedHeaders.XForwardedProto |
+                              ForwardedHeaders.XForwardedHost
         });
 
         // Enable response compression
