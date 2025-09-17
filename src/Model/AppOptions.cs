@@ -27,5 +27,12 @@ namespace PlayaApiV2.Model
         /// Default: 8890
         /// </summary>
         public int Port { get; set; } = 8890;
+
+        /// <summary>
+        /// External URL for the application when behind a reverse proxy (like Traefik).
+        /// This is used to generate proper URLs for clients.
+        /// Default: null (uses internal host/port)
+        /// </summary>
+        public string ExternalUrl { get; set; } = null;
     }
 }

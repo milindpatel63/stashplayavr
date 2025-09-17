@@ -571,7 +571,15 @@ namespace PlayaApiV2.Services
             if (string.IsNullOrEmpty(actorId))
                 return null;
             
-            // Get the current request's host to make URLs accessible from external devices
+            // Use external URL if configured (for reverse proxy scenarios)
+            if (!string.IsNullOrEmpty(_appOptions.ExternalUrl))
+            {
+                var authToken = GetCurrentAuthToken();
+                var authParam = !string.IsNullOrEmpty(authToken) ? $"?auth_token={authToken}" : "";
+                return $"{_appOptions.ExternalUrl}/api/playa/v2/actor/{actorId}/image{authParam}";
+            }
+            
+            // Fallback to current request's host
             var request = _httpContextAccessor.HttpContext?.Request;
             var host = request?.Host.ToString() ?? "localhost:8890";
             var scheme = request?.Scheme ?? "http";
@@ -942,7 +950,15 @@ namespace PlayaApiV2.Services
             if (string.IsNullOrEmpty(videoId))
                 return null;
             
-            // Get the current request's host to make URLs accessible from external devices
+            // Use external URL if configured (for reverse proxy scenarios)
+            if (!string.IsNullOrEmpty(_appOptions.ExternalUrl))
+            {
+                var authToken = GetCurrentAuthToken();
+                var authParam = !string.IsNullOrEmpty(authToken) ? $"?auth_token={authToken}" : "";
+                return $"{_appOptions.ExternalUrl}/api/playa/v2/video/{videoId}/stream{authParam}";
+            }
+            
+            // Fallback to current request's host
             var request = _httpContextAccessor.HttpContext?.Request;
             var host = request?.Host.ToString() ?? "localhost:8890";
             var scheme = request?.Scheme ?? "http";
@@ -960,7 +976,13 @@ namespace PlayaApiV2.Services
             if (string.IsNullOrEmpty(videoId))
                 return null;
             
-            // Get the current request's host to make URLs accessible from external devices
+            // Use external URL if configured (for reverse proxy scenarios)
+            if (!string.IsNullOrEmpty(_appOptions.ExternalUrl))
+            {
+                return $"{_appOptions.ExternalUrl}/api/playa/v2/video/{videoId}/download";
+            }
+            
+            // Fallback to current request's host
             var request = _httpContextAccessor.HttpContext?.Request;
             var host = request?.Host.ToString() ?? "localhost:8890";
             var scheme = request?.Scheme ?? "http";
