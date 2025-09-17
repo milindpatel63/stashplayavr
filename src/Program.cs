@@ -82,14 +82,6 @@ internal class Program
 
         var app = builder.Build();
 
-        // Handle forwarded headers from Traefik
-        app.UseForwardedHeaders(new Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersOptions
-        {
-            ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | 
-                              Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto |
-                              Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost
-        });
-
         // Enable response compression
         app.UseResponseCompression();
 
